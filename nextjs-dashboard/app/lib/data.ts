@@ -9,6 +9,7 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { unstable_noStore } from 'next/cache';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -25,6 +26,8 @@ export async function fetchRevenue() {
 
     // console.log('Data fetch completed after 3 seconds.');
 
+    //unstable_noStore();
+
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -34,6 +37,7 @@ export async function fetchRevenue() {
 
 export async function fetchLatestInvoices() {
   try {
+    unstable_noStore();
     const data = await sql<LatestInvoiceRaw>`
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id
       FROM invoices
@@ -54,6 +58,7 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
+    unstable_noStore();
     // You can probably combine these into a single SQL query
     // However, we are intentionally splitting them to demonstrate
     // how to initialize multiple queries in parallel with JS.
@@ -93,6 +98,7 @@ export async function fetchFilteredInvoices(
   currentPage: number,
 ) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+  unstable_noStore();
 
   try {
     const invoices = await sql<InvoicesTable>`
@@ -124,6 +130,7 @@ export async function fetchFilteredInvoices(
 }
 
 export async function fetchInvoicesPages(query: string) {
+  unstable_noStore();
   try {
     const count = await sql`SELECT COUNT(*)
     FROM invoices
@@ -145,6 +152,7 @@ export async function fetchInvoicesPages(query: string) {
 }
 
 export async function fetchInvoiceById(id: string) {
+  unstable_noStore();
   try {
     const data = await sql<InvoiceForm>`
       SELECT
@@ -170,6 +178,7 @@ export async function fetchInvoiceById(id: string) {
 }
 
 export async function fetchCustomers() {
+  unstable_noStore();
   try {
     const data = await sql<CustomerField>`
       SELECT
@@ -188,6 +197,7 @@ export async function fetchCustomers() {
 }
 
 export async function fetchFilteredCustomers(query: string) {
+  unstable_noStore();
   try {
     const data = await sql<CustomersTableType>`
 		SELECT
