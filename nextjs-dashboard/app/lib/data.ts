@@ -26,7 +26,7 @@ export async function fetchRevenue() {
 
     // console.log('Data fetch completed after 3 seconds.');
 
-    //unstable_noStore();
+    unstable_noStore();
 
     return data.rows;
   } catch (error) {
